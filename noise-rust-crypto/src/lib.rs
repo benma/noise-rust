@@ -202,7 +202,7 @@ impl Hash for Sha512 {
 
     fn result(&mut self) -> Self::Output {
         use sha2::Digest;
-        Self::Output::from_slice(self.0.clone().result().as_ref())
+        <Self::Output as U8Array>::from_slice(self.0.clone().result().as_ref())
     }
 }
 
@@ -250,6 +250,6 @@ impl Hash for Blake2b {
 
     fn result(&mut self) -> Self::Output {
         use blake2::Digest;
-        Self::Output::from_slice(self.0.clone().result().as_ref())
+        <Self::Output as U8Array>::from_slice(self.0.clone().result().as_ref())
     }
 }

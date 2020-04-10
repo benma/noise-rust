@@ -1,7 +1,7 @@
 use crate::cipherstate::CipherState;
 use crate::handshakepattern::{HandshakePattern, Token};
 use crate::symmetricstate::SymmetricState;
-use crate::traits::{Cipher, Hash, U8Array, DH};
+use crate::traits::{Cipher, Hash,  PrivateKey, U8Array, DH};
 use arrayvec::{ArrayString, ArrayVec};
 use core::fmt::{Display, Error as FmtError, Formatter, Write};
 
@@ -31,8 +31,8 @@ where
     fn clone(&self) -> Self {
         Self {
             symmetric: self.symmetric.clone(),
-            s: self.s.as_ref().map(U8Array::clone),
-            e: self.e.as_ref().map(U8Array::clone),
+            s: self.s.as_ref().map(PrivateKey::clone),
+            e: self.e.as_ref().map(PrivateKey::clone),
             rs: self.rs.as_ref().map(U8Array::clone),
             re: self.re.as_ref().map(U8Array::clone),
             is_initiator: self.is_initiator,
@@ -324,7 +324,7 @@ where
         for t in m {
             match *t {
                 Token::E => {
-                    let re = D::Pubkey::from_slice(get(D::Pubkey::len()));
+                    let re = <D::Pubkey as U8Array>::from_slice(get(D::Pubkey::len()));
                     self.symmetric.mix_hash(re.as_slice());
                     if self.pattern_has_psk {
                         self.symmetric.mix_key(re.as_slice());

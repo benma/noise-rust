@@ -33,7 +33,7 @@ mod traits;
 extern crate alloc;
 
 pub use crate::cipherstate::CipherState;
-pub use crate::traits::{Cipher, Hash, U8Array, DH};
+pub use crate::traits::{Cipher, PrivateKey, Hash, U8Array, DH};
 
 /// Handshake patterns.
 pub mod patterns {

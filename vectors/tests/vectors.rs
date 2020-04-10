@@ -192,7 +192,7 @@ fn to_pubkey<D>(k: &HexString) -> D::Pubkey
 where
     D: DH,
 {
-    D::Pubkey::from_slice(k.as_ref())
+    <D::Pubkey as U8Array>::from_slice(k.as_ref())
 }
 
 fn verify_vector_with<D, C, H>(v: &Vector) -> bool

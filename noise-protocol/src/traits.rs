@@ -1,3 +1,24 @@
+/// A trait that needs to be implementd by DH private keys.
+pub trait PrivateKey {
+    /// Create a new array from a slice.
+    ///
+    /// # Panics
+    ///
+    /// The slice must be of the same length.
+    fn from_slice(_: &[u8]) -> Self;
+    /// Clone.
+    fn clone(&self) -> Self;
+}
+
+impl<A: U8Array> PrivateKey for A {
+    fn from_slice(b: &[u8]) -> Self {
+        U8Array::from_slice(b)
+    }
+    fn clone(&self) -> Self  {
+        Self::from_slice(self.as_slice())
+    }
+}
+
 /// A trait for fixed size u8 array.
 
 // Inspired by ArrayVec and SmallVec, but no unsafe.
@@ -62,7 +83,7 @@ impl_array!(128);
 /// A DH.
 pub trait DH {
     /// Type of private key.
-    type Key: U8Array;
+    type Key: PrivateKey;
     /// Type of pubkey key.
     type Pubkey: U8Array;
     /// Type of output.
@@ -125,7 +146,7 @@ pub trait Cipher {
         // XXX: `k1` is not zeroed.
         let mut k1 = [0u8; 48];
         Self::encrypt(k, 0u64.wrapping_sub(1), &[], &[0; 32], &mut k1);
-        Self::Key::from_slice(&k1[..32])
+        <Self::Key as PrivateKey>::from_slice(&k1[..32])
     }
 }
 
